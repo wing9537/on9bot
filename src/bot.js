@@ -3,6 +3,9 @@ const config = require("../config.json");
 const mention = require("./mention");
 const leetquery = require("./leetquery");
 const binCalculator = require("./binCalculator");
+const musicPlayer = require("./musicPlayer");
+const timer = require("./timer");
+process.env.TZ = "Asia/Hong_Kong";
 
 // Create a Client instance with our bot token.
 const bot = new eris.Client(config.token);
@@ -22,6 +25,12 @@ bot.on("interactionCreate", leetquery.code());
 
 // it will handle binary calculation with single operator.
 bot.on("messageCreate", binCalculator());
+
+// it will play music.
+bot.on("messageCreate", musicPlayer(bot));
+
+// timer
+bot.on("messageCreate", timer());
 
 // unexpected system error handling
 bot.on("error", (err) => console.warn(err));
