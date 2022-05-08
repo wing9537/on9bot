@@ -36,4 +36,3 @@ bot.on("messageCreate", timer());
 bot.on("error", (err) => console.warn(err));
 
 bot.connect();
-//test
