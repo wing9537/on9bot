@@ -20,21 +20,21 @@ module.exports.list = function () {
                 type: 2,
                 emoji: { id: null, name: "🖐️" },
                 style: 2,
-                custom_id: `${message.author.id} Paper`,
+                custom_id: `${msg.author.id} Paper`,
               },
 
               {
                 type: 2,
                 emoji: { id: null, name: "👊" },
                 style: 2,
-                custom_id: `${message.author.id} Rock`,
+                custom_id: `${msg.author.id} Rock`,
               },
 
               {
                 type: 2,
                 emoji: { id: null, name: "✌️" },
                 style: 2,
-                custom_id: `${message.author.id} Scissors`,
+                custom_id: `${msg.author.id} Scissors`,
               },
             ],
           },
@@ -53,7 +53,6 @@ module.exports.code = function () {
   return async (interaction) => {
     if (interaction.data.component_type !== 2) return;
     if (!compArray.includes(interaction.data.custom_id)) return;
-    console.log(interaction);
     const ans = interaction.data.custom_id;
     await interaction.channel.createMessage(playRound(ans, computerPlay()));
     return await interaction.acknowledge();
@@ -89,29 +88,15 @@ const computerPlay = () => {
 };
 
 const playRound = (playerSelection, computerSelection) => {
-  if (playerSelection === "Rock") {
-    if (computerSelection === "Rock") {
-      return "Tie";
-    } else if (computerSelection === "Paper") {
-      return `You Lose This Round! ${computerSelection} beats ${playerSelection}.`;
-    } else {
-      return `You Win This Round! ${playerSelection} beats ${computerSelection}.`;
-    }
-  } else if (playerSelection === "Paper") {
-    if (computerSelection === "Rock") {
-      return `You Win This Round! ${playerSelection} beats ${computerSelection}.`;
-    } else if (computerSelection === "Paper") {
-      return "Tie";
-    } else {
-      return `You Lose! ${computerSelection} beats ${playerSelection}.`;
-    }
+  if (
+    (playerSelection === "Rock" && computerSelection === "Scissors") ||
+    (playerSelection === "Paper" && computerSelection === "Rock") ||
+    (playerSelection === "Scissors" && computerSelection === "Paper")
+  ) {
+    return `You Win This Round! ${playerSelection} beats ${computerSelection}.`;
+  } else if (playerSelection === computerSelection) {
+    return "Tie";
   } else {
-    if (computerSelection === "Rock") {
-      return `You Lose This Round! ${computerSelection} beats ${playerSelection}.`;
-    } else if (computerSelection === "Paper") {
-      return `You Win This Round! ${playerSelection} beats ${computerSelection}.`;
-    } else {
-      return "Tie";
-    }
+    return `You Lose This Round! ${computerSelection} beats ${playerSelection}.`;
   }
 };
