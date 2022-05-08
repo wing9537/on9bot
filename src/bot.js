@@ -35,10 +35,10 @@ bot.on("messageCreate", musicPlayer(bot));
 bot.on("messageCreate", timer());
 
 // it will initial game panel.
-bot.on("messageCreate", rpsGame.list());
+bot.on("messageCreate", rpsGame.onStart());
 
 // it will allow user to play Rock Paper Scissors
-bot.on("interactionCreate", rpsGame.code());
+bot.on("interactionCreate", rpsGame.onClick());
 
 // unexpected system error handling
 bot.on("error", (err) => console.warn(err));

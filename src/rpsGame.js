@@ -2,7 +2,7 @@ const prefix = "#rps";
 const compArray = ["Rock", "Paper", "Scissors"];
 const messageObj = {};
 
-module.exports.list = function () {
+module.exports.onStart = function () {
   return async (msg) => {
     if (!msg.channel.guild) return;
     if (!msg.content.startsWith(`${prefix} start`)) return;
@@ -38,13 +38,13 @@ module.exports.list = function () {
       });
       messageObj[userId] = messageID;
     } catch (err) {
-      console.warn("Failed to respond to rpsGame list.");
+      console.warn("Failed to respond to rpsGame onStart.");
       console.warn(err);
     }
   };
 };
 
-module.exports.code = function () {
+module.exports.onClick = function () {
   return async (interaction) => {
     if (interaction.data.component_type !== 2) return;
     if (!interaction.data.custom_id.startsWith(prefix)) return;
@@ -58,7 +58,7 @@ module.exports.code = function () {
       await messageObj[params[1]].edit(`<@${userId}> ${result} :robot:`);
       return await interaction.acknowledge();
     } catch (err) {
-      console.warn("Failed to respond to rpsGame code.");
+      console.warn("Failed to respond to rpsGame click.");
       console.warn(err);
     }
   };
