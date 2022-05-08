@@ -7,11 +7,9 @@ module.exports.list = function () {
     if (!msg.channel.guild) return;
     if (!msg.content.startsWith(`${prefix} start`)) return;
     try {
+      const userId = msg.author.id;
       const messageID = await msg.channel.createMessage({
-        // embed: {
-        //   title: `Rock Paper Scissors`,
-        //   fields: [],
-        // },
+        content: `<@${userId}> Let's play. :robot:`,
         components: [
           {
             type: 1,
@@ -20,30 +18,27 @@ module.exports.list = function () {
                 type: 2,
                 emoji: { id: null, name: "🖐️" },
                 style: 2,
-                custom_id: `${msg.author.id} Paper`,
+                custom_id: `${prefix} ${userId} Paper`,
               },
-
               {
                 type: 2,
                 emoji: { id: null, name: "👊" },
                 style: 2,
-                custom_id: `${msg.author.id} Rock`,
+                custom_id: `${prefix} ${userId} Rock`,
               },
-
               {
                 type: 2,
                 emoji: { id: null, name: "✌️" },
                 style: 2,
-                custom_id: `${msg.author.id} Scissors`,
+                custom_id: `${prefix} ${userId} Scissors`,
               },
             ],
           },
         ],
       });
-      //const messageID = await msg.channel.createMessage("123");
-      messageObj[msg.author.id] = messageID;
+      messageObj[userId] = messageID;
     } catch (err) {
-      console.warn("Failed to respond to leetquery list.");
+      console.warn("Failed to respond to rpsGame list.");
       console.warn(err);
     }
   };
@@ -52,33 +47,20 @@ module.exports.list = function () {
 module.exports.code = function () {
   return async (interaction) => {
     if (interaction.data.component_type !== 2) return;
-    if (!compArray.includes(interaction.data.custom_id)) return;
-    const ans = interaction.data.custom_id;
-    await interaction.channel.createMessage(playRound(ans, computerPlay()));
-    return await interaction.acknowledge();
+    if (!interaction.data.custom_id.startsWith(prefix)) return;
 
-    // if (params.length < 4) return;
-    // try {
-    //   const user = params[1];
-    //   const bi = params[2].startsWith("bi") ? "bi" : "";
-    //   const num = params[2].replace("bi", "");
-    //   const key = params[3];
-    //   const url = `${domain}/files/${bi}weekly-contest-${num}-${user}.json`;
-    //   const res = await fetch(url);
-    //   const dm = await interaction.member.user.getDMChannel();
-    //   if (res.ok) {
-    //     const data = await res.json();
-    //     const code = `${data.username} ${key} :robot:\n${data[key].code}`;
-    //     for (let i = 0, len = code.length; i < len; i += 2000)
-    //       await dm.createMessage(code.substring(i, i + 1999));
-    //   } else {
-    //     return await dm.createMessage("no content. :robot:");
-    //   }
-    //   return await interaction.acknowledge();
-    // } catch (err) {
-    //   console.warn("Failed to respond to leetquery code.");
-    //   console.warn(err);
-    // }
+    const userId = interaction.member.user.id;
+    const params = interaction.data.custom_id.split(" ");
+    if (userId != params[1]) return await interaction.acknowledge();
+    if (params.length < 3) return;
+    try {
+      const result = rpsResult(params[2], computerPlay());
+      await messageObj[params[1]].edit(`<@${userId}> ${result} :robot:`);
+      return await interaction.acknowledge();
+    } catch (err) {
+      console.warn("Failed to respond to rpsGame code.");
+      console.warn(err);
+    }
   };
 };
 
@@ -87,16 +69,16 @@ const computerPlay = () => {
   return compArray[ramdonValue];
 };
 
-const playRound = (playerSelection, computerSelection) => {
+const rpsResult = (playerSelection, computerSelection) => {
   if (
     (playerSelection === "Rock" && computerSelection === "Scissors") ||
     (playerSelection === "Paper" && computerSelection === "Rock") ||
     (playerSelection === "Scissors" && computerSelection === "Paper")
   ) {
-    return `You Win This Round! ${playerSelection} beats ${computerSelection}.`;
+    return `You Win This Round! **${playerSelection}** beats **${computerSelection}**.`;
   } else if (playerSelection === computerSelection) {
     return "Tie";
   } else {
-    return `You Lose This Round! ${computerSelection} beats ${playerSelection}.`;
+    return `You Lose This Round! **${computerSelection}** beats **${playerSelection}**.`;
   }
 };

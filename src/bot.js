@@ -4,8 +4,8 @@ const mention = require("./mention");
 const leetquery = require("./leetquery");
 const binCalculator = require("./binCalculator");
 const rpsGame = require("./rpsGame");
+const musicPlayer = require("./musicPlayer");
 
-//const musicPlayer = require("./musicPlayer");
 const timer = require("./timer");
 process.env.TZ = "Asia/Hong_Kong";
 
@@ -29,7 +29,7 @@ bot.on("interactionCreate", leetquery.code());
 bot.on("messageCreate", binCalculator());
 
 // it will play music.
-//bot.on("messageCreate", musicPlayer(bot));
+bot.on("messageCreate", musicPlayer(bot));
 
 // timer
 bot.on("messageCreate", timer());
