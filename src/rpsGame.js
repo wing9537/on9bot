@@ -51,11 +51,12 @@ module.exports.onClick = function () {
 
     const userId = interaction.member.user.id;
     const params = interaction.data.custom_id.split(" ");
-    if (userId != params[1]) return await interaction.acknowledge();
     if (params.length < 3) return;
     try {
-      const result = rpsResult(params[2], computerPlay());
-      await messageObj[params[1]].edit(`<@${userId}> ${result} :robot:`);
+      if (userId == params[1]) {
+        const result = rpsResult(params[2], computerPlay());
+        await messageObj[userId].edit(`<@${userId}> ${result} :robot:`);
+      }
       return await interaction.acknowledge();
     } catch (err) {
       console.warn("Failed to respond to rpsGame click.");
