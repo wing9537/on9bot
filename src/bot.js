@@ -3,7 +3,9 @@ const config = require("../config.json");
 const mention = require("./mention");
 const leetquery = require("./leetquery");
 const binCalculator = require("./binCalculator");
-const musicPlayer = require("./musicPlayer");
+const rpsGame = require("./rpsGame");
+
+//const musicPlayer = require("./musicPlayer");
 const timer = require("./timer");
 process.env.TZ = "Asia/Hong_Kong";
 
@@ -27,13 +29,18 @@ bot.on("interactionCreate", leetquery.code());
 bot.on("messageCreate", binCalculator());
 
 // it will play music.
-bot.on("messageCreate", musicPlayer(bot));
+//bot.on("messageCreate", musicPlayer(bot));
 
 // timer
 bot.on("messageCreate", timer());
+
+// it will initial game panel.
+bot.on("messageCreate", rpsGame.list());
+
+// it will allow user to play Rock Paper Scissors
+bot.on("interactionCreate", rpsGame.code());
 
 // unexpected system error handling
 bot.on("error", (err) => console.warn(err));
 
 bot.connect();
-//test
