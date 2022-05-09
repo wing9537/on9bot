@@ -56,8 +56,8 @@ module.exports.onClick = function () {
       if (userId == params[1]) {
         const result = rpsResult(params[2], computerPlay());
         await messageObj[userId].edit(`<@${userId}> ${result} :robot:`);
+        return await interaction.acknowledge();
       }
-      return await interaction.acknowledge();
     } catch (err) {
       console.warn("Failed to respond to rpsGame click.");
       console.warn(err);
