@@ -1,4 +1,4 @@
-const prefix = "#play";
+const prefix = "#play ";
 const ytdl = require("ytdl-core");
 const options = { quality: "highestaudio", filter: "audioonly" };
 
@@ -9,9 +9,10 @@ module.exports = function (bot) {
     if (!msg.member.voiceState) return;
 
     try {
+      const link = msg.content.split(" ")[1] || "bP9gMpl1gyQ";
       const channelId = msg.member.voiceState.channelID;
       const conn = await bot.joinVoiceChannel(channelId, { selfDeaf: true });
-      conn.play(ytdl("dy90tA3TT1c", options));
+      conn.play(ytdl(link, options));
     } catch (err) {
       console.warn("Failed to respond to musicPlayer.");
       console.warn(err);
