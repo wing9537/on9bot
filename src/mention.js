@@ -25,7 +25,7 @@ module.exports = function (botName) {
 };
 
 const currencyLink = "https://query1.finance.yahoo.com/v8/finance/chart/";
-const currencyList = ["HKD", "JPY", "KRW", "TWD", "CNY", "USD", "EUR", "AUD", "THB"];
+const currencyList = ["HKD", "JPY", "KRW", "TWD", "CNY", "USD", "EUR", "GBP", "AUD", "THB"];
 const getExchangeRate = async ([c1, c2]) => {
   let msg = "Unexpected currency. :robot:";
   if (c1 != c2 && currencyList.includes(c1) && currencyList.includes(c2)) {
