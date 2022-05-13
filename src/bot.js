@@ -5,8 +5,9 @@ const leetquery = require("./leetquery");
 const binCalculator = require("./binCalculator");
 const rpsGame = require("./rpsGame");
 const musicPlayer = require("./musicPlayer");
-
 const timer = require("./timer");
+
+globalThis.fetch = require("node-fetch");
 process.env.TZ = "Asia/Hong_Kong";
 
 // Create a Client instance with our bot token.
