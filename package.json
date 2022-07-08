@@ -10,7 +10,7 @@
     "ytdl-core": "^4.11.0"
   },
   "scripts": {
-    "start": "clear && node  ./src/bot.js",
+    "start": "node  ./src/bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
