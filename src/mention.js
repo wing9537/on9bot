@@ -1,6 +1,8 @@
 module.exports = function (botName) {
   return async (msg) => {
-    const botWasMentioned = msg.mentions.find((mentionedUser) => mentionedUser.username === botName);
+    const botWasMentioned = msg.mentions.find(
+      (mentionedUser) => mentionedUser.username === botName
+    );
     try {
       if (botWasMentioned && msg.channel.guild) {
         let content = msg.content.replace(/<@[0-9]+>/g, "").trim();
@@ -25,15 +27,13 @@ module.exports = function (botName) {
 };
 
 const currencyLink = "https://query1.finance.yahoo.com/v8/finance/chart/";
-const currencyList = ["HKD", "JPY", "KRW", "TWD", "CNY", "USD", "EUR", "GBP", "AUD", "THB"];
+// const currencyList = ["HKD", "JPY", "KRW", "TWD", "CNY", "USD", "EUR", "GBP", "AUD", "THB", "CAD"];
 const getExchangeRate = async ([c1, c2]) => {
   let msg = "Unexpected currency. :robot:";
-  if (c1 != c2 && currencyList.includes(c1) && currencyList.includes(c2)) {
-    const res = await fetch(`${currencyLink + c1 + c2}=X`);
-    if (res.ok) {
-      const data = await res.json();
-      msg = data.chart.result[0].meta.previousClose + " :robot:";
-    }
+  const res = await fetch(`${currencyLink + c1 + c2}=X`);
+  if (res.ok) {
+    const data = await res.json();
+    msg = data.chart.result[0].meta.previousClose + " :robot:";
   }
   return msg;
 };
