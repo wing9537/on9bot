@@ -6,9 +6,9 @@ function dateDiffInDays(a, b) {
   const utc2 = Date.UTC(0, 0, 0, b.getHours(), b.getMinutes());
   return utc2 - utc1;
 }
-const alarm = function (msg) {
+function alarm(msg) {
   msg.channel.createMessage(`<@${msg.author.id}> Now :robot:`);
-};
+}
 
 module.exports = function () {
   return async (msg) => {

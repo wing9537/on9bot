@@ -1,11 +1,12 @@
 const eris = require("eris");
 const config = require("../config.json");
-const mention = require("./mention");
-const leetquery = require("./leetquery");
-const binCalculator = require("./binCalculator");
-const rpsGame = require("./rpsGame");
-const musicPlayer = require("./musicPlayer");
-const timer = require("./timer");
+const mention = require("./mention.js");
+const leetquery = require("./leetquery.js");
+const binCalculator = require("./binCalculator.js");
+const rpsGame = require("./rpsGame.js");
+const musicPlayer = require("./musicPlayer.js");
+const timer = require("./timer.js");
+const markSix = require("./markSix.js");
 
 globalThis.fetch = require("node-fetch");
 process.env.TZ = "Asia/Hong_Kong";
@@ -40,6 +41,9 @@ bot.on("messageCreate", rpsGame.onStart());
 
 // it will allow user to play Rock Paper Scissors
 bot.on("interactionCreate", rpsGame.onClick());
+
+// it will query mark-six
+bot.on("messageCreate", markSix());
 
 // unexpected system error handling
 bot.on("error", (err) => console.warn(err));
