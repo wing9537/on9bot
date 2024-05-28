@@ -16,7 +16,9 @@ const bot = new eris.Client(config.token);
 const botName = "on9bot";
 
 // When the bot is connected and ready, log to console.
-bot.on("ready", () => console.log("Connected and ready."));
+bot.on("ready", () => {
+  console.log("Connected and ready.");
+});
 
 // it will check if the bot was mentioned.
 bot.on("messageCreate", mention(botName));

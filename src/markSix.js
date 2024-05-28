@@ -1,5 +1,6 @@
 const prefix = "#marksix ";
-const HTMLParser = require('node-html-parser');
+const htmlParser = require('node-html-parser');
+const fileHelper = require('./fileHelper.js');
 
 module.exports = function () {
   return async (msg) => {
@@ -13,7 +14,10 @@ module.exports = function () {
         result = await getMarkSixInfo();
       }
       if (command.startsWith('draw')) {
-        result = drawMarkSix(command.replace('draw', ''));
+        result = drawMarkSix(command.replace('draw ', ''));
+      }
+      if (command.startsWith('alarm')) {
+        result = setupAlarm(command.replace('alarm ', ''), msg.channel.id);
       }
       await msg.channel.createMessage(result);
     } catch (err) {
@@ -25,7 +29,7 @@ module.exports = function () {
 
 async function getMarkSixInfo() {
   const res = await fetch('https://bet.hkjc.com/marksix/index.aspx?lang=en');
-  const html = HTMLParser.parse(await res.text());
+  const html = htmlParser.parse(await res.text());
   return html.querySelector('table table table').structuredText;
 }
 
@@ -42,4 +46,20 @@ function drawMarkSix(amount, range = 49) {
     sets.add(Array.from(set).sort((a, b) => a - b).join(' '));
   }
   return Array.from(sets).join('\n');
+}
+
+function setupAlarm(flag, channelId) {
+  const channelIds = fileHelper.read('marksix_alarm.txt').split(',').filter(v => v);
+  const index = channelIds.indexOf(channelId);
+  let msg = 'Done!';
+  if (flag === 'enable' && index == -1) {
+    channelIds.push(channelId);
+    msg = 'You will receive a notification at 7am every day. :robot:';
+  }
+  if (flag === 'disable' && index > -1) {
+    channelIds.splice(index, 1);
+    msg = 'You will no longer receive notifications. :robot:';
+  }
+  fileHelper.write('marksix_alarm.txt', channelIds.join());
+  return msg;
 }
