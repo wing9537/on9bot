@@ -7,7 +7,7 @@ module.exports.read = function(file) {
     console.log(`Cannot read file: ${file}.`);
     return '';
   }
-}
+};
 
 module.exports.write = function(file, content) {
   try {
@@ -15,4 +15,4 @@ module.exports.write = function(file, content) {
   } catch (error) {
     console.log(`Cannot write file: ${file} = ${content}.`);
   }
-}
+};

@@ -65,12 +65,12 @@ module.exports.onClick = function () {
   };
 };
 
-const computerPlay = () => {
+function computerPlay() {
   const ramdonValue = Math.floor(Math.random() * compArray.length);
   return compArray[ramdonValue];
-};
+}
 
-const rpsResult = (playerSelection, computerSelection) => {
+function rpsResult(playerSelection, computerSelection) {
   if (
     (playerSelection === "Rock" && computerSelection === "Scissors") ||
     (playerSelection === "Paper" && computerSelection === "Rock") ||
@@ -82,4 +82,4 @@ const rpsResult = (playerSelection, computerSelection) => {
   } else {
     return `You Lose This Round! **${computerSelection}** beats **${playerSelection}**.`;
   }
-};
+}

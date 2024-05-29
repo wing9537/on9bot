@@ -1,8 +1,9 @@
 const prefix = "#marksix ";
+const jsonFile = "marksix_alarm.json";
 const htmlParser = require('node-html-parser');
 const fileHelper = require('./fileHelper.js');
 
-module.exports = function () {
+module.exports.task = function () {
   return async (msg) => {
     if (!msg.channel.guild) return;
     if (!msg.content.startsWith(prefix)) return;
@@ -27,6 +28,18 @@ module.exports = function () {
   };
 };
 
+module.exports.alarm = async function (bot) {
+  const json = JSON.parse(fileHelper.read(jsonFile) || '{}');
+  const info = (await getMarkSixInfo()).split('\n');
+  const prize = Number(info[11].replace(/\D/g, ''));
+  const msg = `The next MarkSix is up to ${info[11]}. :robot:\nDeadline: ${info[3]}.`;
+
+  // send alert message to all registered channel if match conditions.
+  for (const [channelId, value] of Object.entries(json)) {
+    if (prize >= value) bot.createMessage(channelId, msg);
+  }
+};
+
 async function getMarkSixInfo() {
   const res = await fetch('https://bet.hkjc.com/marksix/index.aspx?lang=en');
   const html = htmlParser.parse(await res.text());
@@ -48,18 +61,17 @@ function drawMarkSix(amount, range = 49) {
   return Array.from(sets).join('\n');
 }
 
-function setupAlarm(flag, channelId) {
-  const channelIds = fileHelper.read('marksix_alarm.txt').split(',').filter(v => v);
-  const index = channelIds.indexOf(channelId);
-  let msg = 'Done!';
-  if (flag === 'enable' && index == -1) {
-    channelIds.push(channelId);
-    msg = 'You will receive a notification at 7am every day. :robot:';
+function setupAlarm(command, channelId) {
+  const json = JSON.parse(fileHelper.read(jsonFile) || '{}');
+  let msg = '';
+  if (command.startsWith('enable')) {
+    msg = 'You will receive a MarkSix notification at 7pm every day. :robot:';
+    json[channelId] = Number(command.replace(/\D/g, '')) || 0;
   }
-  if (flag === 'disable' && index > -1) {
-    channelIds.splice(index, 1);
-    msg = 'You will no longer receive notifications. :robot:';
+  if (command.startsWith('disable')) {
+    msg = 'You will no longer receive MarkSix notifications. :robot:';
+    delete json[channelId];
   }
-  fileHelper.write('marksix_alarm.txt', channelIds.join());
+  fileHelper.write(jsonFile, JSON.stringify(json));
   return msg;
 }

@@ -28,7 +28,7 @@ module.exports = function (botName) {
 
 const currencyLink = "https://query1.finance.yahoo.com/v8/finance/chart/";
 // const currencyList = ["HKD", "JPY", "KRW", "TWD", "CNY", "USD", "EUR", "GBP", "AUD", "THB", "CAD"];
-const getExchangeRate = async ([c1, c2]) => {
+async function getExchangeRate([c1, c2]) {
   let msg = "Unexpected currency. :robot:";
   const res = await fetch(`${currencyLink + c1 + c2}=X`);
   if (res.ok) {
@@ -36,4 +36,4 @@ const getExchangeRate = async ([c1, c2]) => {
     msg = data.chart.result[0].meta.previousClose + " :robot:";
   }
   return msg;
-};
+}

@@ -1,4 +1,6 @@
 const eris = require("eris");
+const schedule = require('node-schedule');
+
 const config = require("../config.json");
 const mention = require("./mention.js");
 const leetquery = require("./leetquery.js");
@@ -18,6 +20,7 @@ const botName = "on9bot";
 // When the bot is connected and ready, log to console.
 bot.on("ready", () => {
   console.log("Connected and ready.");
+  schedule.scheduleJob('* 19 * * *', () => markSix.alarm(bot));
 });
 
 // it will check if the bot was mentioned.
@@ -45,7 +48,7 @@ bot.on("messageCreate", rpsGame.onStart());
 bot.on("interactionCreate", rpsGame.onClick());
 
 // it will query mark-six
-bot.on("messageCreate", markSix());
+bot.on("messageCreate", markSix.task());
 
 // unexpected system error handling
 bot.on("error", (err) => console.warn(err));
